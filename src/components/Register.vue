@@ -32,6 +32,7 @@
 <script>
 import firebase from 'firebase'
 import router from '../router/index.js'
+import userObject from './user.js'
 
 export default {
   name: 'Register',
@@ -42,27 +43,56 @@ export default {
         name: '',
         email: '',
         password: ''
-      }
+      },
+      userInfo: {}
     }
   },
   methods: {
-    register () {
+    register (e) {
       firebase.auth().createUserWithEmailAndPassword(this.formRegister.email, this.formRegister.password)
         .then((user) => {
-          user.updateProfile({displayName: this.formRegister.name})
-          user.sendEmailVerification()
-          sessionStorage.setItem('auth', true)
-          router.push('/search')
+          userObject.profile = user
+          this.processAutenticate()
+          this.isAuthenticate()
         })
         .catch((e) => {
           console.log(e)
         })
+      e.preventDefault()
+    },
+    processAutenticate () {
+      userObject.profile.updateProfile({
+        displayName: this.formRegister.name ? this.formRegister.name : '',
+        phoneNumber: this.formRegister.phone ? this.formRegister.phone : ''
+      })
+      userObject.profile.sendEmailVerification()
+    },
+    isAuthenticate () {
+      sessionStorage.setItem('auth', true)
+      console.log(userObject.profile)
+      router.push('/search')
     }
   }
 }
 </script>
 
 <style>
+  html {
+    width: 100%;
+    height: 100%;
+    background: url("../assets/background.jpg") no-repeat;
+  }
+
+  .toast {
+    transition: ease-in 0.5ms
+  }
+
+  body {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+
   #register {
     padding-top: 1px;
   }

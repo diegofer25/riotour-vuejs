@@ -36,6 +36,8 @@ router.beforeEach((to, from, next) => {
     } else {
       next('/')
     }
+  } else if (sessionStorage.getItem('auth')) {
+    next('/search')
   } else {
     next()
   }

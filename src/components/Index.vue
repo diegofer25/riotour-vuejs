@@ -17,7 +17,7 @@
           <label>Senha</label>
         </div>
         <div class="row">
-          <button type="submit" class="btn waves-effect mt-2 col s5 m4 l4">Login</button>
+          <button type="submit" class="btn waves-effect mt-2 col s5 m6 l6">Login</button>
           <router-link class="btn waves-effect waves-light cyan darken-3 mt-2 col s5 m4 l4 offset-s1 right" :to="'/register'">Registrar</router-link>
         </div>
       </form>
@@ -40,6 +40,7 @@
 import M from 'Materialize-css'
 import firebase from 'firebase'
 import router from '../router/index.js'
+import userObject from './user.js'
 
 export default {
   name: 'Index',
@@ -67,13 +68,23 @@ export default {
     googleLogin () {
       let googleLoginInstance = new firebase.auth.GoogleAuthProvider()
       firebase.auth().signInWithPopup(googleLoginInstance)
-        .then((user) => {
-          sessionStorage.setItem('auth', true)
-          router.push('/search')
+        .then((response) => {
+          userObject.profile = response.user
+          this.processAutenticate()
+          this.isAuthenticate()
         })
         .catch((e) => {
           console.log(e)
         })
+    },
+    processAutenticate () {
+      console.log(userObject.profile)
+      userObject.profile.sendEmailVerification()
+    },
+    isAuthenticate () {
+      sessionStorage.setItem('auth', true)
+      console.log(userObject.profile)
+      router.push('/search')
     },
     facebookLogin () {
       M.toast('Login Facebook não implementado', 3000)
@@ -120,6 +131,10 @@ export default {
 
   #index {
     padding-top: 1px;
+  }
+
+  .toast {
+    transition: ease-in 0.5ms
   }
 
   .form-login {
