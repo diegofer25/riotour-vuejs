@@ -1,21 +1,17 @@
 <template>
   <div class="parallax">
-    <layout :user="user"></layout>
+    <layout></layout>
   </div>
 </template>
 
 <script>
-// import { tarefasRef } from '../../firebase'
-// import userObject from '../user.js'
 import Layout from './components/Layout'
-import userObject from '../user.js'
 
 export default {
   name: 'Search',
   data () {
     return {
-      title: 'Buscar Local',
-      user: userObject
+      title: 'Buscar Local'
     }
   },
   components: {

@@ -17,19 +17,22 @@
           <label>Senha</label>
         </div>
         <div class="row">
-          <button type="submit" class="btn waves-effect mt-2 col s5 m6 l6">Login</button>
-          <router-link class="btn waves-effect waves-light cyan darken-3 mt-2 col s5 m4 l4 offset-s1 right" :to="'/register'">Registrar</router-link>
+          <button type="submit" class="btn waves-effect mt-2 col s6">Login</button>
+          <router-link class="btn waves-effect waves-light cyan darken-3 mt-2 col s5 m4 l4 offset-s1 offset-m2 offset-l2 right" :to="'/register'">Registrar</router-link>
         </div>
       </form>
       <div class="row">
-        <button @click="googleLogin()" class="btn waves-effect waves-light btn-facebook col s12  m10 l8 offset-m1 offset-l2 deep-orange darken-4">
-          <span class="fa fa-google-plus"></span> Login com Google
+        <button @click="googleLogin()" class="btn tooltipped waves-effect waves-light col s12 m2 l2 offset-m2 offset-l2 deep-orange darken-4 mt-1"
+        data-position="bottom" data-tooltip="Google +">
+          <span class="fa fa-google-plus"></span>
         </button>
-        <button @click="facebookLogin()" class="btn btn-facebook col s12  m10 l8 offset-m1 offset-l2 light-blue darken-4 mt-1">
-          <span class="fa fa-facebook"></span> Login com Facebook
+        <button @click="facebookLogin()" class="btn tooltipped col s12 m2 l2 offset-m1 offset-l1 light-blue darken-4 mt-1"
+        data-position="bottom" data-tooltip="Facebook">
+          <span class="fa fa-facebook"></span>
         </button>
-        <button @click="twitterLogin()" class="btn btn-facebook col s12  m10 l8 offset-m1 offset-l2 light-blue darken-1 mt-1">
-          <span class="fa fa-twitter"></span> Login com Twitter
+        <button @click="twitterLogin()" class="btn tooltipped col s12 m2 l2 offset-m1 offset-l1 light-blue darken-1 mt-1"
+        data-position="bottom" data-tooltip="Twitter">
+          <span class="fa fa-twitter"></span>
         </button>
       </div>
     </div>
@@ -40,10 +43,13 @@
 import M from 'Materialize-css'
 import firebase from 'firebase'
 import router from '../router/index.js'
-import userObject from './user.js'
+import $ from 'jquery'
 
 export default {
   name: 'Index',
+  mounted () {
+    $('.tooltipped').tooltip()
+  },
   data () {
     return {
       title: 'Rio Tour',
@@ -69,21 +75,24 @@ export default {
       let googleLoginInstance = new firebase.auth.GoogleAuthProvider()
       firebase.auth().signInWithPopup(googleLoginInstance)
         .then((response) => {
-          userObject.profile = response.user
+          this.user = response.user
           this.processAutenticate()
-          this.isAuthenticate()
         })
         .catch((e) => {
           console.log(e)
         })
     },
     processAutenticate () {
-      console.log(userObject.profile)
-      userObject.profile.sendEmailVerification()
+      this.user.sendEmailVerification()
+      this.saveUser()
+    },
+    saveUser (user) {
+      let strUser = JSON.stringify(this.user)
+      sessionStorage.setItem('user', strUser)
+      this.isAuthenticate()
     },
     isAuthenticate () {
       sessionStorage.setItem('auth', true)
-      console.log(userObject.profile)
       router.push('/search')
     },
     facebookLogin () {
@@ -131,10 +140,6 @@ export default {
 
   #index {
     padding-top: 1px;
-  }
-
-  .toast {
-    transition: ease-in 0.5ms
   }
 
   .form-login {

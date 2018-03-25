@@ -21,8 +21,8 @@
           <label>Senha</label>
         </div>
         <div class="row">
-          <router-link class="btn waves-effect waves-light cyan darken-3 mt-2 col s3" :to="'/'">Voltar</router-link>
-          <button type="submit" class="btn waves-effect mt-2 col s6 offset-s3">Registrar</button>
+          <router-link class="btn waves-effect waves-light cyan darken-3 mt-2 col s4 m3 l3" :to="'/'">Voltar</router-link>
+          <button type="submit" class="btn waves-effect mt-2 col s6 offset-s2 offset-m3 offset-l3">Registrar</button>
         </div>
       </form>
     </div>
@@ -32,7 +32,7 @@
 <script>
 import firebase from 'firebase'
 import router from '../router/index.js'
-import userObject from './user.js'
+import M from 'Materialize-css'
 
 export default {
   name: 'Register',
@@ -44,32 +44,36 @@ export default {
         email: '',
         password: ''
       },
-      userInfo: {}
+      user: ''
     }
   },
   methods: {
     register (e) {
-      firebase.auth().createUserWithEmailAndPassword(this.formRegister.email, this.formRegister.password)
-        .then((user) => {
-          userObject.profile = user
-          this.processAutenticate()
-          this.isAuthenticate()
-        })
-        .catch((e) => {
-          console.log(e)
-        })
+      if (this.formRegister.password.length >= 6) {
+        firebase.auth().createUserWithEmailAndPassword(this.formRegister.email, this.formRegister.password)
+          .then((user) => {
+            this.user = user
+            this.processAutenticate()
+            this.isAuthenticate()
+          })
+          .catch((e) => {
+            console.log(e)
+          })
+      } else {
+        M.toast('Sua senha deve conter pelo menos <strong> 6 </strong> digitos', 3000)
+      }
       e.preventDefault()
     },
     processAutenticate () {
-      userObject.profile.updateProfile({
-        displayName: this.formRegister.name ? this.formRegister.name : '',
-        phoneNumber: this.formRegister.phone ? this.formRegister.phone : ''
+      this.user.updateProfile({
+        displayName: this.formRegister.name ? this.formRegister.name : null,
+        phoneNumber: this.formRegister.phone ? this.formRegister.phone : null
       })
-      userObject.profile.sendEmailVerification()
+      this.user.sendEmailVerification()
     },
     isAuthenticate () {
       sessionStorage.setItem('auth', true)
-      console.log(userObject.profile)
+      sessionStorage.setItem('user', JSON.stringify(this.user))
       router.push('/search')
     }
   }

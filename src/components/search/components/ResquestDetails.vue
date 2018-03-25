@@ -87,9 +87,6 @@
 
 export default {
   name: 'ResultCards',
-  props: {
-    places: ''
-  },
   data () {
     return {
       placesDetails: this.places
@@ -104,7 +101,7 @@ export default {
   }
 
   .cards-container {
-    column-break-inside: avoid;
+    -webkit-column-break-inside: avoid;
   }
   .cards-container .card {
     /*display: inline-block;*/

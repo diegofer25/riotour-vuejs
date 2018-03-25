@@ -62,11 +62,6 @@ import ResquestDetails from './ResquestDetails'
 
 export default {
   name: 'RequestPlaces',
-  data () {
-    return {
-      title: 'Rio Tour'
-    }
-  },
   components: {
     resultcars: ResquestDetails
   }

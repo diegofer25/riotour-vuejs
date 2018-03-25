@@ -1,25 +1,40 @@
 <template>
   <div class="fade white-text">
     <header>
-      <nav class="teal darken-1">
-        <div class="nav-wrapper">
-          <button data-activates="slide-out" class="left btn button-collapse">
-            <span class="fa fa-bars"></span>
-          </button>
-          <div>
-            <img class="grey-text text-lighten-4 right" width="80px" src="../../../assets/riotour-logo.png" />
-            <span>{{title}}</span>
+      <div class="navbar-fixed">
+        <nav class="teal darken-1">
+          <div class=" container nav-wrapper">
+            <button data-activates="slide-out" class="left btn button-collapse">
+              <span class="fa fa-bars"></span>
+            </button>
+            <div class="brand-logo center">
+              <img class="grey-text text-lighten-4 pt-05" width="120px" src="../../../assets/riotour-logo.png" />
+            </div>
           </div>
-        </div>
-      </nav>
+        </nav>
+      </div>
     </header>
 
-    <ul id="slide-out" class="side-nav teal darken-4">
-      <li class="center-align">
-        <h4>Bem Vindo</h4>
+    <ul id="slide-out" class="side-nav teal darken-4 ml-2 center-align">
+      <li>
+        <h4>{{title}}</h4>
       </li>
       <li>
-        <span>{{user.displayName}}</span>
+        <img :src="user.photoURL ? user.photoURL : ''" width="70px" class="circle responsive-img">
+      </li>
+      <li>
+        <span>
+          Bem vindo(a) {{user.displayName}}
+         </span>
+      </li>
+      <li></li>
+      <li></li>
+      <li>
+        <a class="sidenav-close">
+          <button class="btn" @click="logoff()">
+            <span class="fa fa-power-off"></span> Sair
+          </button>
+        </a>
       </li>
     </ul>
 
@@ -44,13 +59,20 @@
 </template>
 
 <script>
+import router from '../../../router/index.js'
 import RequestPlaces from './RequestPlaces'
 import $ from 'jquery'
 
 export default {
   name: 'Layout',
-  props: {
-    user: ''
+  data () {
+    return {
+      title: 'Rio Tour',
+      user: ''
+    }
+  },
+  beforeMount () {
+    this.user = JSON.parse(sessionStorage.getItem('user'))
   },
   mounted () {
     $('select').material_select()
@@ -58,13 +80,15 @@ export default {
     $('.button-collapse').sideNav()
     $('.modal').modal()
   },
-  data () {
-    return {
-      title: 'Rio Tour'
-    }
-  },
   components: {
     formsearch: RequestPlaces
+  },
+  methods: {
+    logoff () {
+      sessionStorage.removeItem('user')
+      sessionStorage.removeItem('auth')
+      router.push('/')
+    }
   }
 }
 </script>
@@ -72,5 +96,14 @@ export default {
 <style>
 .fade {
   background-color: rgba(0, 0, 0, 0.6);
+}
+
+ul li span, ul li a {
+  font-size: 1.1em;
+  color: white !important;
+}
+
+.pt-05 {
+  padding-top: 5px;
 }
 </style>
