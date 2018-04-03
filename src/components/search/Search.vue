@@ -20,17 +20,22 @@ export default {
 }
 </script>
 
-<style scoped>
-body, html {
-  height: 100%;
-}
+<style>
+  html {
+    background-image: url('../../assets/background.jpg');
+    height: 100%;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
 
-.parallax {
-  background-image: url('../../assets/background.jpg');
-  height: 100%;
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
+  body {
+    background-color: rgba(0, 0, 0, 0.7);
+    height: 100%;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
 </style>

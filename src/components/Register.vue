@@ -22,7 +22,7 @@
         </div>
         <div class="row">
           <router-link class="btn waves-effect waves-light cyan darken-3 mt-2 col s4 m3 l3" :to="'/'">Voltar</router-link>
-          <button type="submit" class="btn waves-effect mt-2 col s6 offset-s2 offset-m3 offset-l3">Registrar</button>
+          <button type="submit" class="btn mt-2 col s6 offset-s2 offset-m3 offset-l3">Registrar</button>
         </div>
       </form>
     </div>
@@ -57,10 +57,12 @@ export default {
             this.isAuthenticate()
           })
           .catch((e) => {
-            console.log(e)
+            if (e.code === 'auth/invalid-email') {
+              M.toast('Formato de e-mail inválido', 4000)
+            }
           })
       } else {
-        M.toast('Sua senha deve conter pelo menos <strong> 6 </strong> digitos', 3000)
+        M.toast('Sua senha deve conter pelo menos 6 digitos', 4000)
       }
       e.preventDefault()
     },

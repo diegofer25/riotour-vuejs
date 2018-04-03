@@ -22,16 +22,13 @@
         </div>
       </form>
       <div class="row">
-        <button @click="googleLogin()" class="btn tooltipped waves-effect waves-light col s12 m2 l2 offset-m2 offset-l2 deep-orange darken-4 mt-1"
-        data-position="bottom" data-tooltip="Google +">
+        <button @click="googleLogin()" class="btn waves-effect waves-light col s12 m2 l2 offset-m2 offset-l2 deep-orange darken-4 mt-1">
           <span class="fa fa-google-plus"></span>
         </button>
-        <button @click="facebookLogin()" class="btn tooltipped col s12 m2 l2 offset-m1 offset-l1 light-blue darken-4 mt-1"
-        data-position="bottom" data-tooltip="Facebook">
+        <button @click="facebookLogin()" class="btn col s12 m2 l2 offset-m1 offset-l1 light-blue darken-4 mt-1">
           <span class="fa fa-facebook"></span>
         </button>
-        <button @click="twitterLogin()" class="btn tooltipped col s12 m2 l2 offset-m1 offset-l1 light-blue darken-1 mt-1"
-        data-position="bottom" data-tooltip="Twitter">
+        <button @click="twitterLogin()" class="btn col s12 m2 l2 offset-m1 offset-l1 light-blue darken-1 mt-1">
           <span class="fa fa-twitter"></span>
         </button>
       </div>
@@ -43,13 +40,9 @@
 import M from 'Materialize-css'
 import firebase from 'firebase'
 import router from '../router/index.js'
-import $ from 'jquery'
 
 export default {
   name: 'Index',
-  mounted () {
-    $('.tooltipped').tooltip()
-  },
   data () {
     return {
       title: 'Rio Tour',
@@ -63,10 +56,15 @@ export default {
     login (e) {
       firebase.auth().signInWithEmailAndPassword(this.formLogin.email, this.formLogin.password)
         .then((user) => {
-          sessionStorage.setItem('auth', true)
-          router.push('/search')
+          this.user = user
+          this.processAutenticate()
         })
         .catch((e) => {
+          if (e.code === 'auth/wrong-password') {
+            M.toast('Senha inválida', 3000)
+          } else if (e.code === 'auth/user-not-found') {
+            M.toast('Usuário não encontrado', 3000)
+          }
           console.log(e)
         })
       e.preventDefault()
@@ -96,30 +94,28 @@ export default {
       router.push('/search')
     },
     facebookLogin () {
-      M.toast('Login Facebook não implementado', 3000)
-      /*
       let facebookLoginInstance = new firebase.auth.FacebookAuthProvider()
       firebase.auth().signInWithPopup(facebookLoginInstance)
-        .then((user) => {
-          console.log(user)
+        .then((response) => {
+          console.log(response)
+          this.user = response.user
+          this.processAutenticate()
         })
         .catch((e) => {
           console.log(e)
         })
-        */
     },
     twitterLogin () {
-      M.toast('Login Twitter não implementado', 3000)
-      /*
       let twitterLoginInstance = new firebase.auth.TwitterAuthProvider()
       firebase.auth().signInWithPopup(twitterLoginInstance)
-        .then((user) => {
-          console.log(user)
+        .then((response) => {
+          console.log(response)
+          this.user = response.user
+          this.processAutenticate()
         })
         .catch((e) => {
           console.log(e)
         })
-        */
     }
   }
 }
@@ -127,15 +123,21 @@ export default {
 
 <style>
   html {
-    width: 100%;
+    background-image: url('../assets/background.jpg');
     height: 100%;
-    background: url("../assets/background.jpg") no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
   }
 
   body {
-    width: 100%;
-    height: 100%;
     background-color: rgba(0, 0, 0, 0.7);
+    height: 100%;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
   }
 
   #index {

@@ -3,8 +3,8 @@
     <header>
       <div class="navbar-fixed">
         <nav class="teal darken-1">
-          <div class=" container nav-wrapper">
-            <button data-activates="slide-out" class="left btn button-collapse">
+          <div class="container nav-wrapper">
+            <button data-activates="slide-out" class="rounded button-collapse btn">
               <span class="fa fa-bars"></span>
             </button>
             <div class="brand-logo center">
@@ -15,27 +15,24 @@
       </div>
     </header>
 
-    <ul id="slide-out" class="side-nav teal darken-4 ml-2 center-align">
+    <ul id="slide-out" class="side-nav">
+      <li><div class="user-view">
+        <div class="background">
+          <img src="../../../assets/rio.jpg" width="100%">
+        </div>
+        <a href="#user" v-if="user.photoURL"><img class="circle" :src="user.photoURL"></a>
+        <a href="#user" v-else><img class="circle" src="../../../assets/profile.jpg"></a>
+        <a href="#name"><span class="white-text name">{{user.displayName}}</span></a>
+        <a href="#email"><span class="white-text email">{{user.email}}</span></a>
+      </div></li>
+      <li><a href="#!">{{title}}</a></li>
+      <li><div class="divider"></div></li>
+      <li><a class="subheader">Menu</a></li>
       <li>
-        <h4>{{title}}</h4>
-      </li>
-      <li>
-        <img :src="user.photoURL ? user.photoURL : ''" width="70px" class="circle responsive-img">
-      </li>
-      <li>
-        <span>
-          Bem vindo(a) {{user.displayName}}
-         </span>
-      </li>
-      <li></li>
-      <li></li>
-      <li>
-        <a class="sidenav-close">
-          <button class="btn" @click="logoff()">
-            <span class="fa fa-power-off"></span> Sair
-          </button>
-        </a>
-      </li>
+        <a class="waves-effect" @click="logoff()" href="#!">
+            <span class="fa fa-power-off"></span> Logoff
+          </a>
+        </li>
     </ul>
 
     <formsearch></formsearch>
@@ -75,7 +72,6 @@ export default {
     this.user = JSON.parse(sessionStorage.getItem('user'))
   },
   mounted () {
-    $('select').material_select()
     $('.collapsible').collapsible()
     $('.button-collapse').sideNav()
     $('.modal').modal()
@@ -87,6 +83,7 @@ export default {
     logoff () {
       sessionStorage.removeItem('user')
       sessionStorage.removeItem('auth')
+      $('.button-collapse').sideNav('destroy')
       router.push('/')
     }
   }
@@ -94,16 +91,25 @@ export default {
 </script>
 
 <style>
-.fade {
-  background-color: rgba(0, 0, 0, 0.6);
-}
+  .pt-05 {
+    padding-top: 5px;
+  }
 
-ul li span, ul li a {
-  font-size: 1.1em;
-  color: white !important;
-}
+    html {
+    background-image: url('../../../assets/background.jpg');
+    height: 100%;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
 
-.pt-05 {
-  padding-top: 5px;
-}
+  body {
+    background-color: rgba(0, 0, 0, 0.7);
+    height: 100%;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
 </style>

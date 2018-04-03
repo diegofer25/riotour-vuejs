@@ -13,15 +13,18 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@google/maps": "^0.4.5",
     "bootstrap": "^4.0.0",
     "bootstrap-vue": "^2.0.0-rc.2",
     "firebase": "^4.12.0",
     "jquery": "^3.3.1",
     "materialize-css": "^0.100.2",
+    "npm": "^5.8.0",
     "vue": "^2.5.2",
     "vue-resource": "^1.5.0",
     "vue-router": "^3.0.1",
     "vue-session": "^1.0.0",
+    "vue2-google-maps": "^0.8.11",
     "vuefire": "^1.4.5"
   },
   "devDependencies": {
