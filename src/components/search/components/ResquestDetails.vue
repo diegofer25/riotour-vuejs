@@ -3,7 +3,7 @@
     <div class="cards-container" v-if="placesDetails">
       <div class="card hoverable" v-for="place in placesDetails" :key="place.place_id">
         <div class="card-image waves-effect waves-block" v-if="place.photos">
-          <img width="100%" :src="place.photos[0].getUrl({'maxWidth': 1024, 'maxHeight': 512})">
+          <img width="100%" :src="place.photos[0].getUrl({'maxWidth': 512, 'maxHeight': 300})">
         </div>
         <div class="card-content">
           <div class="row">
@@ -11,7 +11,7 @@
               <strong>{{place.name}}</strong> -
               <img src="../../../assets/star.png" width="20px">
               {{place.rating ? place.rating : 'Não Avaliado'}}
-              <a :href="'#' + place.place_id" class="btn btn-floating right pulse modal-trigger">
+              <a @click="refreshModal()" :href="'#' + place.place_id" class="btn btn-floating right pulse modal-trigger">
                 <span class="fa fa-search-plus"></span>
               </a>
             </span>
@@ -32,7 +32,7 @@
           <div class="container modal-content">
             <div class="col s12 m10 l8 offset-m1 offset-l2">
               <span class="card-title grey-text text-darken-4">
-                <strong>{{place.name}}</strong> - 
+                <strong>{{place.name}}</strong> -
                 <img src="../../../assets/star.png" width="20px">
                 {{place.rating ? place.rating : 'Não valiado'}}
                 <button @click="closeModal(place.place_id)" class="btn btn-floating right pulse modal-trigger">
@@ -91,15 +91,12 @@
 
 <script>
 import $ from 'jquery'
+
 export default {
   name: 'ResultCards',
 
   props: {
     placesDetails: ''
-  },
-
-  updated () {
-    $('.modal').modal()
   },
 
   methods: {
@@ -109,6 +106,10 @@ export default {
 
     closeModal (id) {
       $('#' + id).modal('close')
+    },
+
+    refreshModal () {
+      $('.modal').modal()
     }
   }
 }
@@ -120,7 +121,7 @@ export default {
   }
 
 .divider {
-    background-color: rgba(255,255,255,0.3);
+  background-color: rgba(255,255,255,0.3);
 }
 
 .cards-container {
@@ -129,7 +130,7 @@ export default {
   break-inside: avoid;
 }
 .cards-container .card {
-  /*display: inline-block;*/
+  display: inline-block;
   overflow: visible;
 }
 

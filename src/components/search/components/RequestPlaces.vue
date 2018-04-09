@@ -2,7 +2,7 @@
   <div class="white-text">
     <div class="row">
       <div v-if="userGeolocation === ''" class="col s6 offset-s3 center-align">
-        <span class="black-text mt-3">Aguarde, estamos obtendo sua localização</span>
+        <span class="black-text mt-3 white-text">Aguarde, estamos obtendo sua localização</span>
         <div class="progress">
           <div class="indeterminate"></div>
         </div>
@@ -53,7 +53,7 @@
             <label>Nome do local (Opcional)</label>
           </div>
         </div>
-        <button v-if="userGeolocation !== ''" @click="requestPlaces()" id="search" class="btn col s12 m5 l5 mt-2">Buscar</button>
+        <button v-if="userGeolocation !== ''" @click="validateRequest()" id="search" class="btn col s12 m5 l5 mt-2">Buscar</button>
         <button v-show="moreButton" id="more" class="btn col s12 m5 l5 offset-m1 offset-l1 mt-2">Mais</button>
       </div>
       <div class="row"></div>
@@ -96,8 +96,15 @@ export default {
   },
 
   methods: {
+    validateRequest () {
+      if (this.formSearch.place) {
+        this.requestPlaces()
+      } else {
+        alert('Por favor escolha um tipo de local para buscar')
+      }
+    },
+
     requestPlaces () {
-      console.log(this.userGeolocation)
       const google = window.google
       let position = this.userGeolocation.coords
       this.map = new google.maps.Map(document.querySelector('#map'), {
@@ -114,22 +121,32 @@ export default {
     },
 
     processResults (places, status, pagination) {
+      if (places.length === 0) {
+        this.noResults()
+      }
       const google = window.google
       const service = new google.maps.places.PlacesService(this.map)
       if (status === google.maps.places.PlacesServiceStatus.OK) {
         this.moreButton = pagination.hasNextPage
         this.placesList = []
         places.forEach(place => {
-          service.getDetails(
-            {placeId: place.place_id}, this.getPlacesDetails)
+          service.getDetails({placeId: place.place_id}, this.getPlacesDetails)
         })
         if (this.moreButton) {
-          var moreButton = document.querySelector('#more')
-          moreButton.addEventListener('click', function () {
-            pagination.nextPage()
-          })
+          this.nextPage(pagination)
         }
       }
+    },
+
+    nextPage (pagination) {
+      var moreButton = document.querySelector('#more')
+      moreButton.addEventListener('click', function () {
+        pagination.nextPage()
+      })
+    },
+
+    noResults () {
+      alert('Sua busca não trouxe nenhum resultado, experimente aumentar o raio de busca')
     },
 
     getPlacesDetails (place, status) {
