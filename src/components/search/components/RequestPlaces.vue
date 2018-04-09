@@ -1,9 +1,15 @@
 <template>
-  <div>
+  <div class="white-text">
     <div class="row">
-      <form class="col s12 m8 l6 offset-l3 offset-m2 black-text" @submit="getPlaces()">
-        <h2 class="center-align white-text">{{title}}</h2>
-        <div class="row">
+      <div v-if="userGeolocation === ''" class="col s6 offset-s3 center-align">
+        <span class="black-text mt-3">Aguarde, estamos obtendo sua localização</span>
+        <div class="progress">
+          <div class="indeterminate"></div>
+        </div>
+      </div>
+      <div class="col s12 m8 l6 offset-l3 offset-m2">
+        <h2 class="center-align">{{title}}</h2>
+        <div class="row black-text">
           <div class="col s6">
             <select v-model="formSearch.place" class="browser-default">
               <option value="" disabled selected>O que procura?</option>
@@ -25,8 +31,9 @@
             </select>
           </div>
         </div>
+
         <div class="row">
-          <p class="range-field col s12 white-text">Raio de busca {{formSearch.radius}}m
+          <p class="range-field col s12">Raio de busca (metros)
             <input v-model="formSearch.radius" type="range" min="0" max="10000" />
           </p>
         </div>
@@ -42,16 +49,18 @@
         </div>
         <div class="row">
           <div class="input-field col s12">
-            <input class="white-text" v-model="formSearch.textPlace" type="text">
+            <input v-model="formSearch.textPlace" type="text">
             <label>Nome do local (Opcional)</label>
           </div>
         </div>
-        <button type="submit" id="search" class="btn col s12 m6 l6 offset-m3 offset-l3">Buscar</button>
-        <button v-if="false" id="more" class="btn waves-effect waves-light col s4 m4 l2 offset-s1 offset-m1 offset-l1">Mais
-        </button>
-      </form>
+        <button v-if="userGeolocation !== ''" @click="requestPlaces()" id="search" class="btn col s12 m5 l5 mt-2">Buscar</button>
+        <button v-show="moreButton" id="more" class="btn col s12 m5 l5 offset-m1 offset-l1 mt-2">Mais</button>
+      </div>
+      <div class="row"></div>
     </div>
-    <resultcars></resultcars>
+    <div class="col s10">
+      <resultcars :placesDetails="placesList"></resultcars>
+    </div>
     <div id="map"></div>
   </div>
 </template>
@@ -71,39 +80,79 @@ export default {
         isPhoto: '',
         textPlace: ''
       },
-      userGeolocation: ''
+      userGeolocation: '',
+      map: '',
+      moreButton: false,
+      placesList: []
     }
   },
+
+  mounted () {
+    this.getPosition()
+  },
+
   components: {
     resultcars: ResquestDetails
   },
+
   methods: {
-    getPlaces () {
-      this.getPosition()
+    requestPlaces () {
+      console.log(this.userGeolocation)
+      const google = window.google
+      let position = this.userGeolocation.coords
+      this.map = new google.maps.Map(document.querySelector('#map'), {
+        center: {lat: position.latitude, lng: position.longitude},
+        zoom: 17
+      })
+      var service = new google.maps.places.PlacesService(this.map)
+      let form = this.formSearch
+      service.nearbySearch({
+        location: {lat: position.latitude, lng: position.longitude},
+        radius: form.radius,
+        type: form.place
+      }, this.processResults)
     },
+
+    processResults (places, status, pagination) {
+      const google = window.google
+      const service = new google.maps.places.PlacesService(this.map)
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        this.moreButton = pagination.hasNextPage
+        this.placesList = []
+        places.forEach(place => {
+          service.getDetails(
+            {placeId: place.place_id}, this.getPlacesDetails)
+        })
+        if (this.moreButton) {
+          var moreButton = document.querySelector('#more')
+          moreButton.addEventListener('click', function () {
+            pagination.nextPage()
+          })
+        }
+      }
+    },
+
+    getPlacesDetails (place, status) {
+      const google = window.google
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        this.placesList.push(place)
+        console.log(this.placesList)
+      }
+    },
+
     getPosition () {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
           this.userGeolocation = position
-          console.log(this.userGeolocation)
-          console.log(this.formSearch)
         })
-      } else {
-        console.log('error')
       }
-    },
-    requestPlaces () {
     }
   }
 }
 </script>
 
 <style>
-  select {
-    width: 100%;
-    padding: 5px;
-    border: 1px solid rgba(43, 43, 43);
-    border-radius: 5px;
-    height: 3rem;
+  .mt-2 {
+    margin-top: 20px;
   }
 </style>

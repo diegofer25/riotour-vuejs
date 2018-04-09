@@ -69,6 +69,7 @@ export default {
         })
       e.preventDefault()
     },
+
     googleLogin () {
       let googleLoginInstance = new firebase.auth.GoogleAuthProvider()
       firebase.auth().signInWithPopup(googleLoginInstance)
@@ -80,19 +81,23 @@ export default {
           console.log(e)
         })
     },
+
     processAutenticate () {
       this.user.sendEmailVerification()
       this.saveUser()
     },
+
     saveUser (user) {
       let strUser = JSON.stringify(this.user)
       sessionStorage.setItem('user', strUser)
       this.isAuthenticate()
     },
+
     isAuthenticate () {
       sessionStorage.setItem('auth', true)
       router.push('/search')
     },
+
     facebookLogin () {
       let facebookLoginInstance = new firebase.auth.FacebookAuthProvider()
       firebase.auth().signInWithPopup(facebookLoginInstance)
@@ -105,6 +110,7 @@ export default {
           console.log(e)
         })
     },
+
     twitterLogin () {
       let twitterLoginInstance = new firebase.auth.TwitterAuthProvider()
       firebase.auth().signInWithPopup(twitterLoginInstance)
@@ -122,17 +128,8 @@ export default {
 </script>
 
 <style>
-  html {
-    background-image: url('../assets/background.jpg');
-    height: 100%;
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-
   body {
-    background-color: rgba(0, 0, 0, 0.7);
+    background-image: url('../assets/background-fade.jpg');
     height: 100%;
     background-attachment: fixed;
     background-position: center;

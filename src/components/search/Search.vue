@@ -21,17 +21,8 @@ export default {
 </script>
 
 <style>
-  html {
-    background-image: url('../../assets/background.jpg');
-    height: 100%;
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-
   body {
-    background-color: rgba(0, 0, 0, 0.7);
+    background-image: url('../../assets/background-fade.jpg');
     height: 100%;
     background-attachment: fixed;
     background-position: center;

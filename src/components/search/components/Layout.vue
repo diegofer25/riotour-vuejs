@@ -37,7 +37,7 @@
 
     <formsearch></formsearch>
 
-    <footer class="page-footer teal darken-2">
+    <footer class="page-footer teal darken-2 mt-5">
       <div class="container">
         <div class="row">
           <div class="col l6 s12">
@@ -68,17 +68,21 @@ export default {
       user: ''
     }
   },
+
   beforeMount () {
     this.user = JSON.parse(sessionStorage.getItem('user'))
   },
+
   mounted () {
     $('.collapsible').collapsible()
     $('.button-collapse').sideNav()
     $('.modal').modal()
   },
+
   components: {
     formsearch: RequestPlaces
   },
+
   methods: {
     logoff () {
       sessionStorage.removeItem('user')
@@ -95,21 +99,7 @@ export default {
     padding-top: 5px;
   }
 
-    html {
-    background-image: url('../../../assets/background.jpg');
-    height: 100%;
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-
-  body {
-    background-color: rgba(0, 0, 0, 0.7);
-    height: 100%;
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+  .mt-5 {
+    margin-top: 50px;
   }
 </style>
