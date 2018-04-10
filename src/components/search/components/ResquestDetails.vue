@@ -204,6 +204,6 @@ export default {
 }
 
 .modal, .bottom-sheet{
-  max-height: 90%;
+  max-height: 90% !important;
 }
 </style>
