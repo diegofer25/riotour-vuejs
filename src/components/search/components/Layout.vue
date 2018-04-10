@@ -8,7 +8,7 @@
               <span class="fa fa-bars"></span>
             </button>
             <div class="brand-logo center">
-              <img class="grey-text text-lighten-4 pt-05" width="120px" src="../../../assets/riotour-logo.png" />
+              <img class="grey-text text-lighten-4 pt-05" width="110px" src="../../../assets/riotour-logo.png" />
             </div>
           </div>
         </nav>

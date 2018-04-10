@@ -203,7 +203,7 @@ export default {
   border-radius: 3px;
 }
 
-.modal.bottom-sheet{
-  max-height: 100%;
+.modal, .bottom-sheet{
+  max-height: 90%;
 }
 </style>
