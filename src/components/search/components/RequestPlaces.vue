@@ -26,8 +26,8 @@
           <div class="col s6">
             <select v-model="formSearch.orderBy" class="browser-default">
               <option value="" disabled selected>Ordenar Por</option>
-              <option value="false">Relevância</option>
-              <option value="true">Distância</option>
+              <option :value="false">Relevância</option>
+              <option :value="true">Distância</option>
             </select>
           </div>
         </div>
@@ -115,8 +115,10 @@ export default {
       let form = this.formSearch
       service.nearbySearch({
         location: {lat: position.latitude, lng: position.longitude},
-        radius: form.radius,
-        type: form.place
+        radius: form.orderBy ? 0 : form.radius,
+        type: form.place,
+        name: this.formSearch.textPlace,
+        rankBy: form.orderBy ? google.maps.places.RankBy.DISTANCE : google.maps.places.RankBy.PROMINENCE
       }, this.processResults)
     },
 
@@ -130,7 +132,13 @@ export default {
         this.moreButton = pagination.hasNextPage
         this.placesList = []
         places.forEach(place => {
-          service.getDetails({placeId: place.place_id}, this.getPlacesDetails)
+          if (this.formSearch.isPhoto) {
+            if (place.photos) {
+              service.getDetails({placeId: place.place_id}, this.getPlacesDetails)
+            }
+          } else {
+            service.getDetails({placeId: place.place_id}, this.getPlacesDetails)
+          }
         })
         if (this.moreButton) {
           this.nextPage(pagination)

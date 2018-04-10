@@ -3,7 +3,7 @@
     <div class="cards-container" v-if="placesDetails">
       <div class="card hoverable" v-for="place in placesDetails" :key="place.place_id">
         <div class="card-image waves-effect waves-block" v-if="place.photos">
-          <img width="100%" :src="place.photos[0].getUrl({'maxWidth': 512, 'maxHeight': 300})">
+          <img width="100%" :src="place.photos[0].getUrl({'maxWidth': 600, 'maxHeight': 600})">
         </div>
         <div class="card-content">
           <div class="row">
@@ -11,17 +11,18 @@
               <strong>{{place.name}}</strong> -
               <img src="../../../assets/star.png" width="20px">
               {{place.rating ? place.rating : 'Não Avaliado'}}
-              <a @click="refreshModal()" :href="'#' + place.place_id" class="btn btn-floating right pulse modal-trigger">
+              <a :href="'#' + place.place_id" class="btn btn-floating right pulse modal-trigger tooltipped"
+                data-position="bottom" data-delay="20" data-tooltip="Ver detalhes">
                 <span class="fa fa-search-plus"></span>
               </a>
             </span>
           </div>
           <div class="row center-align">
             <p>
-              <a class="btn col s4 offset-s1 center-align tooltipped" :href="place.url" target="_blank" data-position="top" data-delay="50" data-tooltip="Ver no mapa">
+              <a class="btn col s4 offset-s1 center-align tooltipped" :href="place.url" target="_blank" data-position="bottom" data-delay="20" data-tooltip="Ver no mapa">
                 <span class="fa fa-map-o"></span>
               </a>
-              <a v-if="place.website" class="btn col s4 offset-s2 center-align tooltipped" :href="place.website" target="_blank" data-position="top" data-delay="50" data-tooltip="Visite o site">
+              <a v-if="place.website" class="btn col s4 offset-s2 center-align tooltipped" :href="place.website" target="_blank" data-position="bottom" data-delay="20" data-tooltip="Visite o site">
                 <span class="fa fa-globe"></span>
               </a>
             </p>
@@ -35,13 +36,13 @@
                 <strong>{{place.name}}</strong> -
                 <img src="../../../assets/star.png" width="20px">
                 {{place.rating ? place.rating : 'Não valiado'}}
-                <button @click="closeModal(place.place_id)" class="btn btn-floating right pulse modal-trigger">
+                <button @click="closeModal(place.place_id)" class="btn btn-floating right modal-trigger">
                   <span class="fa fa-times"></span>
                 </button>
               </span>
               <div class="slider" v-if="place.photos">
                 <ul class="slides">
-                  <li v-for="photo in place.photos" :key="photo.getUrl({'maxWidth': 1024, 'maxHeight': 512})">
+                  <li v-for="photo in place.photos" :key="photo['.key']">
                     <img :src="photo.getUrl({'maxWidth': 1024, 'maxHeight': 512})">
                   </li>
                 </ul>
@@ -64,16 +65,17 @@
               <h5>Comentários</h5>
               <p>
                 <ul class="collapsible popout" data-collapsible="accordion">
-                  <li>
-                    <div class="collapsible-header">
-                      <img width="50px" height="50px" src="" /> deu nota:
-                      <strong></strong>
+                  <li v-for="review in place.reviews" :key="review['.key']">
+                    <div class="collapsible-header" @click="accordionOpen(review.author_name)">
+                      <img width="50px" height="50px" :src="review.profile_photo_url" />
+                      {{review.author_name}} deu nota:
+                      <strong>{{review.rating}}</strong>
                     </div>
                     <div class="collapsible-body">
                       <span>
-                        <p>
+                        <p>{{review.text}}
                           <br>
-                          <span class="right"></span>
+                          <span class="right">{{review.relative_time_description}}</span>
                         </p>
                       </span>
                     </div>
@@ -99,17 +101,19 @@ export default {
     placesDetails: ''
   },
 
-  methods: {
-    showSlids () {
-      $('.slider').slider()
-    },
+  updated () {
+    $('.tooltipped').tooltip({delay: 50})
+    $('.modal').modal()
+    $('.slider').slider()
+  },
 
+  methods: {
     closeModal (id) {
       $('#' + id).modal('close')
     },
 
-    refreshModal () {
-      $('.modal').modal()
+    accordionOpen (key) {
+      $('.collapsible').collapsible('open', key)
     }
   }
 }
