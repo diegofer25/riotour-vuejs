@@ -22,11 +22,11 @@ export default {
 
 <style>
   body {
-    background-image: url('../../assets/background-fade.jpg');
-    height: 100%;
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-image: url('../../assets/background-fade.jpg') !important;
+    height: 100% !important;
+    background-attachment: fixed !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
   }
 </style>

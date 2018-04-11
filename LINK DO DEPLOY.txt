@@ -1,0 +1,3 @@
+Azure: https://riotour-vuejs.azurewebsites.net/#/
+
+Firebase: https://httpplaces-1520910240546.firebaseapp.com/#/
