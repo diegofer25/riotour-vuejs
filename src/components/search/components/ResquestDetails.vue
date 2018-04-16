@@ -33,12 +33,14 @@
           <div class="container modal-content">
             <div class="col s12 m10 l8 offset-m1 offset-l2">
               <span class="card-title grey-text text-darken-4">
-                <strong>{{place.name}}</strong> -
-                <img src="../../../assets/star.png" width="20px">
-                {{place.rating ? place.rating : 'Não valiado'}}
-                <button @click="closeModal(place.place_id)" class="btn btn-floating right modal-trigger">
-                  <span class="fa fa-times"></span>
-                </button>
+                <div class="row">
+                  <strong>{{place.name}}</strong> -
+                  <img src="../../../assets/star.png" width="20px">
+                  {{place.rating ? place.rating : 'Não valiado'}}
+                  <button @click="closeModal(place.place_id)" class="btn btn-floating right modal-trigger">
+                    <span class="fa fa-times"></span>
+                  </button>
+                </div>
               </span>
               <div class="slider" v-if="place.photos">
                 <ul class="slides">
