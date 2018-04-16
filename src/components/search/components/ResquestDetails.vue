@@ -132,7 +132,16 @@ export default {
     saveFavorite (place) {
       let user = JSON.parse(sessionStorage.getItem('user'))
       console.log(user)
-      favoritesRef.push({'favorite': user})
+      favoritesRef.push({
+        'name': place.name ? place.name : '',
+        'vicinity': place.vicinity ? place.vicinity : '',
+        'formatted_phone_number': place.formatted_phone_number ? place.formatted_phone_number : '',
+        'rating': place.rating ? place.rating : '',
+        'url': place.url,
+        'website': place.website ? place.website : '',
+        'photos': place.photos ? place.photos[0].getUrl({'maxWidth': 600, 'maxHeight': 600}) : '',
+        'reviews': place.reviews ? place.reviews : ''
+      })
       console.log(favoritesRef)
       M.toast(place.name + ' salvo nos seus favoritos com sucesso', 3000)
     }

@@ -19,15 +19,14 @@ export default {
     }
   },
 
-  firebase: function () {
-    return {
-      favorites: favoritesRef.once('value')
+  computed: {
+    favorites: function () {
+      return favoritesRef.toJSON()
     }
   },
 
   methods: {
     teste () {
-      console.log(this.user)
       console.log(this.favorites)
     }
   }
