@@ -10,4 +10,4 @@ const app = initializeApp({
 })
 
 export const db = app.database()
-export const tarefasRef = db.ref('tarefas')
+export const favoritesRef = db.ref('favorites')

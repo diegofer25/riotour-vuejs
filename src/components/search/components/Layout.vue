@@ -29,11 +29,24 @@
       <li><div class="divider"></div></li>
       <li><a class="subheader">Menu</a></li>
       <li>
+        <a class="modal-trigger" href="#favorites">Favoritos</a>
+      </li>
+      <li>
         <a class="waves-effect" @click="logoff()" href="#!">
             <span class="fa fa-power-off"></span> Logoff
           </a>
         </li>
     </ul>
+
+    <!-- Modal Structure -->
+    <div id="favorites" class="modal">
+      <div class="modal-content black-text">
+        <favorites></favorites>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn btn-flat grey lighten-5">Fechar</a>
+      </div>
+    </div>
 
     <formsearch></formsearch>
 
@@ -58,6 +71,7 @@
 <script>
 import router from '../../../router/index.js'
 import RequestPlaces from './RequestPlaces'
+import Favorites from './Favorite'
 import $ from 'jquery'
 
 export default {
@@ -80,7 +94,8 @@ export default {
   },
 
   components: {
-    formsearch: RequestPlaces
+    formsearch: RequestPlaces,
+    favorites: Favorites
   },
 
   methods: {

@@ -57,12 +57,15 @@
                 <span>{{place.rating ? place.rating : 'Não Avaliado'}}</span>
               </div>
               <div class="row">
-                <a class="btn s4 offset-s1 center-align" :href="place.url" target="_blank">
+                <a class="btn col s2" :href="place.url" target="_blank">
                   <span class="fa fa-map-o"></span>
                 </a>
-                <a v-if="place.website" class="btn s4 offset-s2 center-align" :href="place.website" target="_blank">
+                <a v-if="place.website" class="btn col s2 offset-s1" :href="place.website" target="_blank">
                   <span class="fa fa-globe"></span>
                 </a>
+                <button class="btn col s2 offset-s5" @click="saveFavorite(place)">
+                  <span class="fa fa-star"></span> Favoritar
+                </button>
               </div>
               <h5>Comentários</h5>
               <p>
@@ -94,10 +97,18 @@
 </template>
 
 <script>
+import M from 'Materialize-css'
+import {favoritesRef} from '../../../firebase'
 import $ from 'jquery'
 
 export default {
   name: 'ResultCards',
+
+  data () {
+    return {
+      favorite: ''
+    }
+  },
 
   props: {
     placesDetails: ''
@@ -116,6 +127,14 @@ export default {
 
     accordionOpen (key) {
       $('.collapsible').collapsible('open', key)
+    },
+
+    saveFavorite (place) {
+      let user = JSON.parse(sessionStorage.getItem('user'))
+      console.log(user)
+      favoritesRef.push({'favorite': user})
+      console.log(favoritesRef)
+      M.toast(place.name + ' salvo nos seus favoritos com sucesso', 3000)
     }
   }
 }
