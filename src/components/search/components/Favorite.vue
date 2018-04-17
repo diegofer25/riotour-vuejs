@@ -1,7 +1,7 @@
 <template>
   <div class="text-black">
     <h4>Locais favoritos</h4>
-    <button @click="teste()">click</button>
+    <button @click="teste()">teste</button>
     <div class="col s10">
       <resultcars :placesDetails="favorites"></resultcars>
     </div>
@@ -10,6 +10,7 @@
 
 <script>
 import {favoritesRef} from '../../../firebase'
+import ResquestDetails from './ResquestDetails'
 
 export default {
   name: 'Favorite',
@@ -21,7 +22,7 @@ export default {
 
   computed: {
     favorites: function () {
-      return favoritesRef.toJSON()
+      return favoritesRef
     }
   },
 
@@ -29,6 +30,10 @@ export default {
     teste () {
       console.log(this.favorites)
     }
+  },
+
+  components: {
+    resultcars: ResquestDetails
   }
 }
 </script>
