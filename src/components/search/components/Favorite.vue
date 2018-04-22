@@ -1,9 +1,8 @@
 <template>
   <div class="text-black">
-    <h4>Locais favoritos</h4>
-    <button @click="teste()">teste</button>
+    <h4>Locais Favoritos</h4>
     <div class="col s10">
-      <resultcars :placesDetails="favorites"></resultcars>
+      <resultcars :isFavorite="true" :placesDetails="favorites"></resultcars>
     </div>
   </div>
 </template>
@@ -20,10 +19,8 @@ export default {
     }
   },
 
-  computed: {
-    favorites: function () {
-      return favoritesRef
-    }
+  firebase: {
+    favorites: favoritesRef
   },
 
   methods: {

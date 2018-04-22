@@ -4,6 +4,8 @@ import Index from '@/components/Index'
 import Register from '@/components/Register'
 import Search from '@/components/search/Search'
 import RouterError from '@/components/RouterError'
+import Polices from '@/components/Polices'
+import Terms from '@/components/Terms'
 
 Vue.use(Router)
 
@@ -26,6 +28,16 @@ const router = new Router({
       path: '/register',
       name: 'Register',
       component: Register
+    },
+    {
+      path: '/polices',
+      name: 'Polices',
+      component: Polices
+    },
+    {
+      path: '/terms',
+      name: 'Terms',
+      component: Terms
     },
     {
       path: '/*',

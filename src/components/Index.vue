@@ -1,10 +1,8 @@
 <template>
   <div id="index" class="container center white-text">
     <div class="row">
-      <p>
-        <img  width="210px" src="../assets/riotour-logo.png" />
-        {{title}}<br>
-      </p>
+      <img  width="210px" src="../assets/riotour-logo.png" />
+      <h3>Rio Tour</h3>
     </div>
     <div class="form-login">
       <form class="form center-align" @submit="login">

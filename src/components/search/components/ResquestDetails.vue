@@ -1,9 +1,12 @@
 <template>
   <div class="container">
-    <div class="cards-container" v-if="placesDetails">
+    <div :class="isFavorite ? '' : 'cards-container'" v-if="placesDetails">
       <div class="card hoverable" v-for="place in placesDetails" :key="place.place_id">
-        <div class="card-image waves-effect waves-block" v-if="place.photos">
+        <div class="card-image waves-effect waves-block" v-if="place.photos && !isFavorite">
           <img width="100%" :src="place.photos[0].getUrl({'maxWidth': 600, 'maxHeight': 600})">
+        </div>
+        <div class="card-image waves-effect waves-block" v-else>
+          <img width="100%" :src="place.photos">
         </div>
         <div class="card-content">
           <div class="row">
@@ -11,7 +14,7 @@
               <strong>{{place.name}}</strong> -
               <img src="../../../assets/star.png" width="20px">
               {{place.rating ? place.rating : 'Não Avaliado'}}
-              <a :href="'#' + place.place_id" class="btn btn-floating right pulse modal-trigger tooltipped"
+              <a v-if="!isFavorite" :href="'#' + place.place_id" class="btn btn-floating right pulse modal-trigger tooltipped"
                 data-position="bottom" data-delay="20" data-tooltip="Ver detalhes">
                 <span class="fa fa-search-plus"></span>
               </a>
@@ -26,10 +29,16 @@
                 <span class="fa fa-globe"></span>
               </a>
             </p>
+            <p v-if="isFavorite">
+              <br><br>
+              <span>{{place.vicinity}}</span>
+              <br>Telefone:
+              <span>{{place.formatted_phone_number ? place.formatted_phone_number : 'Não Informado'}}</span>
+            </p>
           </div>
         </div>
 
-        <div :id="place.place_id" class="modal bottom-sheet black-text">
+        <div v-if="!isFavorite" :id="place.place_id" class="modal bottom-sheet black-text">
           <div class="container modal-content">
             <div class="col s12 m10 l8 offset-m1 offset-l2">
               <span class="card-title grey-text text-darken-4">
@@ -110,8 +119,13 @@ export default {
     }
   },
 
+  firebase: {
+    favorites: favoritesRef
+  },
+
   props: {
-    placesDetails: ''
+    placesDetails: '',
+    isFavorite: ''
   },
 
   updated () {
@@ -131,19 +145,28 @@ export default {
 
     saveFavorite (place) {
       let user = JSON.parse(sessionStorage.getItem('user'))
-      console.log(user)
-      favoritesRef.push({
+      let isNotFavorite = true;
+      favorites.forEach(favorite => {
+        if (favorite.place_id === place.place_id) {
+          isNotFavorite = false;
+        }
+      })
+      if (isNotFavorite) {
+        favoritesRef.push({
+        'place_id': place.place_id,
         'name': place.name ? place.name : '',
         'vicinity': place.vicinity ? place.vicinity : '',
         'formatted_phone_number': place.formatted_phone_number ? place.formatted_phone_number : '',
         'rating': place.rating ? place.rating : '',
         'url': place.url,
         'website': place.website ? place.website : '',
-        'photos': place.photos ? place.photos[0].getUrl({'maxWidth': 600, 'maxHeight': 600}) : '',
-        'reviews': place.reviews ? place.reviews : ''
-      })
-      console.log(favoritesRef)
-      M.toast(place.name + ' salvo nos seus favoritos com sucesso', 3000)
+        'photos': place.photos ? place.photos[0].getUrl({'maxWidth': 600, 'maxHeight': 600}) : ''
+        })
+        this.closeModal(place.place_id)
+        M.toast(place.name + ' salvo nos seus favoritos com sucesso', 3000)
+      } else {
+        
+      }
     }
   }
 }
