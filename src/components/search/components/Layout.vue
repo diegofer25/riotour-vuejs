@@ -44,7 +44,7 @@
         <favorites></favorites>
       </div>
       <div class="modal-footer">
-        <a href="#!" class="modal-action modal-close waves-effect waves-green btn btn-flat grey lighten-5">Fechar</a>
+        <a style="cursor: pointer" class="modal-action modal-close btn btn-flat grey lighten-5 hoverable">Fechar</a>
       </div>
     </div>
 
@@ -60,7 +60,7 @@
         </div>
       </div>
       <div class="footer-copyright teal darken-3">
-        <div class="container">© 2018 Diego Lamarão
+        <div class="container">© 2018 Lamarão Softwares
           <img class="grey-text text-lighten-4 right" width="80px" src="../../../assets/riotour-logo.png" />
         </div>
       </div>

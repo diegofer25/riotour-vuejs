@@ -29,12 +29,13 @@
                 <span class="fa fa-globe"></span>
               </a>
             </p>
-            <p >
+            <div class="row"></div>
+            <p v-if="isFavorite">
               <br><br>
               <span>{{place.vicinity}}</span>
               <br>Telefone:
               <span>{{place.formatted_phone_number ? place.formatted_phone_number : 'Não Informado'}}</span>
-              <br>
+              <br><br>
               <button class="btn hoverable" @click="removeFavorite(place, place['.key'])">Remover</button>
             </p>
           </div>
@@ -74,9 +75,9 @@
                 <a v-if="place.website" class="btn col s2 offset-s1" :href="place.website" target="_blank">
                   <span class="fa fa-globe"></span> Site
                 </a>
-                <button class="btn col s2 offset-s5 btn-floating right" @click="saveFavorite(place)">
+                <a class="btn col s2 offset-s5 floating right" @click="saveFavorite(place)">
                   <span class="fa fa-star"></span> Favoritar
-                </button>
+                </a>
               </div>
               <h5>Veja os comentários sobre lugar</h5>
               <p>
