@@ -84,7 +84,7 @@ export default {
   html {
     width: 100%;
     height: 100%;
-    background: url("../assets/background.jpg") no-repeat;
+    background: url("../assets/background-fade.jpg") no-repeat;
   }
 
   .toast {

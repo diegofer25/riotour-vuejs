@@ -78,7 +78,7 @@ export default {
         isPhoto: '',
         textPlace: ''
       },
-      userGeolocation: '',
+      userGeolocation: JSON.parse(localStorage.getItem('position')) ? JSON.parse(localStorage.getItem('position')) : '',
       map: '',
       moreButton: false,
       placesList: [],
@@ -151,15 +151,14 @@ export default {
 
     requestPlaces () {
       const google = window.google
-      let position = this.userGeolocation.coords
       this.map = new google.maps.Map(document.querySelector('#map'), {
-        center: {lat: position.latitude, lng: position.longitude},
+        center: this.userGeolocation,
         zoom: 17
       })
       var service = new google.maps.places.PlacesService(this.map)
       let form = this.formSearch
       service.nearbySearch({
-        location: {lat: position.latitude, lng: position.longitude},
+        location: this.userGeolocation,
         radius: form.orderBy ? 0 : form.radius,
         type: form.place,
         name: this.formSearch.textPlace,
@@ -218,7 +217,9 @@ export default {
     getPosition () {
       if (navigator.geolocation) {
         navigator.geolocation.watchPosition((position) => {
-          this.userGeolocation = position
+          let location = {lat: position.coords.latitude, lng: position.coords.longitude}
+          this.userGeolocation = location
+          localStorage.setItem('position', JSON.stringify(location))
         })
       } else {
         M.toast('Não foi possível obeter sua localização, tente um navegador mais atualizado', 3000)
