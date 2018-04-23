@@ -60,7 +60,7 @@ export default {
     }
   },
 
-  beforeMount () {
+  mounted () {
     this.user = JSON.parse(sessionStorage.getItem('user'))
   },
 

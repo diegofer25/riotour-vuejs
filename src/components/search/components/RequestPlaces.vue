@@ -78,7 +78,7 @@ export default {
         isPhoto: '',
         textPlace: ''
       },
-      userGeolocation: JSON.parse(localStorage.getItem('position')) ? JSON.parse(localStorage.getItem('position')) : '',
+      userGeolocation: JSON.parse(localStorage.getItem('position')) ? JSON.parse(localStorage.getItem('position')) : {lat: -225410, lng: -431227},
       map: '',
       moreButton: false,
       placesList: [],
