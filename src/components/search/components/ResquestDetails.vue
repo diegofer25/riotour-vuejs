@@ -29,11 +29,13 @@
                 <span class="fa fa-globe"></span>
               </a>
             </p>
-            <p v-if="isFavorite">
+            <p >
               <br><br>
               <span>{{place.vicinity}}</span>
               <br>Telefone:
               <span>{{place.formatted_phone_number ? place.formatted_phone_number : 'Não Informado'}}</span>
+              <br>
+              <button class="btn hoverable" @click="removeFavorite(place, place['.key'])">Remover</button>
             </p>
           </div>
         </div>
@@ -67,16 +69,16 @@
               </div>
               <div class="row">
                 <a class="btn col s2" :href="place.url" target="_blank">
-                  <span class="fa fa-map-o"></span>
+                  <span class="fa fa-map-o"></span> Mapa
                 </a>
                 <a v-if="place.website" class="btn col s2 offset-s1" :href="place.website" target="_blank">
-                  <span class="fa fa-globe"></span>
+                  <span class="fa fa-globe"></span> Site
                 </a>
-                <button class="btn col s2 offset-s5" @click="saveFavorite(place)">
+                <button class="btn col s2 offset-s5 btn-floating right" @click="saveFavorite(place)">
                   <span class="fa fa-star"></span> Favoritar
                 </button>
               </div>
-              <h5>Comentários</h5>
+              <h5>Veja os comentários sobre lugar</h5>
               <p>
                 <ul class="collapsible popout" data-collapsible="accordion">
                   <li v-for="review in place.reviews" :key="review['.key']">
@@ -107,7 +109,7 @@
 
 <script>
 import M from 'Materialize-css'
-import {favoritesRef} from '../../../firebase'
+import {db} from '../../../firebase'
 import $ from 'jquery'
 
 export default {
@@ -115,12 +117,17 @@ export default {
 
   data () {
     return {
-      favorite: ''
+      favorite: '',
+      user: ''
     }
   },
 
+  beforeMount () {
+    this.user = JSON.parse(sessionStorage.getItem('user'))
+  },
+
   firebase: {
-    favorites: favoritesRef
+    favorites: db.ref('users/' + (JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).uid : '@nonimus') + '/favorites')
   },
 
   props: {
@@ -131,7 +138,6 @@ export default {
   updated () {
     $('.tooltipped').tooltip({delay: 50})
     $('.modal').modal()
-    $('.slider').slider()
   },
 
   methods: {
@@ -144,29 +150,32 @@ export default {
     },
 
     saveFavorite (place) {
-      let user = JSON.parse(sessionStorage.getItem('user'))
-      let isNotFavorite = true;
-      favorites.forEach(favorite => {
+      let isNotFavorite = true
+      this.favorites.forEach(favorite => {
         if (favorite.place_id === place.place_id) {
-          isNotFavorite = false;
+          isNotFavorite = false
         }
       })
       if (isNotFavorite) {
-        favoritesRef.push({
-        'place_id': place.place_id,
-        'name': place.name ? place.name : '',
-        'vicinity': place.vicinity ? place.vicinity : '',
-        'formatted_phone_number': place.formatted_phone_number ? place.formatted_phone_number : '',
-        'rating': place.rating ? place.rating : '',
-        'url': place.url,
-        'website': place.website ? place.website : '',
-        'photos': place.photos ? place.photos[0].getUrl({'maxWidth': 600, 'maxHeight': 600}) : ''
+        db.ref('users/' + (this.user ? this.user.uid : '@nonimus') + '/favorites').push({
+          'place_id': place.place_id,
+          'name': place.name ? place.name : '',
+          'vicinity': place.vicinity ? place.vicinity : '',
+          'formatted_phone_number': place.formatted_phone_number ? place.formatted_phone_number : '',
+          'rating': place.rating ? place.rating : '',
+          'url': place.url,
+          'website': place.website ? place.website : '',
+          'photos': place.photos ? place.photos[0].getUrl({'maxWidth': 600, 'maxHeight': 600}) : ''
         })
-        this.closeModal(place.place_id)
         M.toast(place.name + ' salvo nos seus favoritos com sucesso', 3000)
       } else {
-        
+        M.toast(place.name + ' Já está salvo em seus favoritos', 3000)
       }
+    },
+
+    removeFavorite (place, key) {
+      M.toast(place.name + ' Já está salvo em seus favoritos', 3000)
+      db.ref('users/' + (this.user ? this.user.uid : '@nonimus') + '/favorites').child(key).remove()
     }
   }
 }

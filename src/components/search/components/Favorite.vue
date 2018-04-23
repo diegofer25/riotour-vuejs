@@ -8,25 +8,18 @@
 </template>
 
 <script>
-import {favoritesRef} from '../../../firebase'
+import {db} from '../../../firebase'
 import ResquestDetails from './ResquestDetails'
 
 export default {
   name: 'Favorite',
-  data () {
-    return {
-      user: JSON.parse(sessionStorage.getItem('user'))
-    }
+
+  beforeMount () {
+    this.user = JSON.parse(sessionStorage.getItem('user'))
   },
 
   firebase: {
-    favorites: favoritesRef
-  },
-
-  methods: {
-    teste () {
-      console.log(this.favorites)
-    }
+    favorites: db.ref('users/' + (JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).uid : '@nonimus') + '/favorites')
   },
 
   components: {

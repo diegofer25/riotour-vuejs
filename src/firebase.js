@@ -10,4 +10,3 @@ const app = initializeApp({
 })
 
 export const db = app.database()
-export const favoritesRef = db.ref('favorites')
