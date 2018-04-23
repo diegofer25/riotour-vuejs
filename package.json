@@ -22,6 +22,7 @@
     "materialize-css": "^0.100.2",
     "npm": "^5.8.0",
     "vue": "^2.5.2",
+    "vue-lodash": "^2.0.0",
     "vue-resource": "^1.5.0",
     "vue-router": "^3.0.1",
     "vue-session": "^1.0.0",

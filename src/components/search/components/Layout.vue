@@ -25,9 +25,8 @@
         <a href="#name"><span class="white-text name">{{user.displayName}}</span></a>
         <a href="#email"><span class="white-text email">{{user.email}}</span></a>
       </div></li>
-      <li><a href="#!">{{title}}</a></li>
+      <li><a href="#">{{title}}</a></li>
       <li><div class="divider"></div></li>
-      <li><a class="subheader">Menu</a></li>
       <li>
         <a class="modal-trigger" href="#favorites">Favoritos</a>
       </li>
@@ -78,7 +77,7 @@ export default {
   name: 'Layout',
   data () {
     return {
-      title: 'Rio Tour',
+      title: 'Bem vindo(a) ao Rio Tour',
       user: ''
     }
   },
