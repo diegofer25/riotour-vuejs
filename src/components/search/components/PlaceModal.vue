@@ -93,8 +93,10 @@ export default {
     this.user = JSON.parse(sessionStorage.getItem('user'))
   },
 
-  firebase: {
-    favorites: db.ref('users/' + (JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).uid : '@nonimus') + '/favorites')
+  firebase: function () {
+    return {
+      favorites: db.ref('users/' + (JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')).uid : '@nonimus') + '/favorites')
+    }
   },
 
   methods: {

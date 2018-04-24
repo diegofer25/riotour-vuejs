@@ -19,6 +19,11 @@ export default {
 
 <style>
   body {
-    background-color: lightblue;
+    background-image: url('../assets/background-fade.jpg');
+    min-height: 100%;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
   }
 </style>

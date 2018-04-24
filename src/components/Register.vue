@@ -47,6 +47,7 @@ export default {
   },
   methods: {
     register (e) {
+      console.log(e)
       if (this.formRegister.password.length >= 6) {
         firebase.auth().createUserWithEmailAndPassword(this.formRegister.email, this.formRegister.password)
           .then((user) => {
@@ -54,9 +55,11 @@ export default {
             this.processAutenticate()
             this.isAuthenticate()
           })
-          .catch((e) => {
-            if (e.code === 'auth/invalid-email') {
+          .catch((error) => {
+            if (error.code === 'auth/invalid-email') {
               M.toast('Formato de e-mail inválido', 4000)
+            } else if (error.code === 'auth/email-already-in-use') {
+              M.toast('Este e-mail já está cadastrado em nossa base de dados', 4000)
             }
           })
       } else {
@@ -81,20 +84,17 @@ export default {
 </script>
 
 <style>
-  html {
-    width: 100%;
-    height: 100%;
-    background: url("../assets/background-fade.jpg") no-repeat;
-  }
-
   .toast {
     transition: ease-in 0.5ms
   }
 
   body {
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-image: url('../assets/background-fade.jpg');
+    min-height: 100%;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
   }
 
   #register {
